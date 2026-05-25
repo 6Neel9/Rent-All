@@ -58,6 +58,19 @@ if (process.env.NODE_ENV !== 'test') {
   app.use(morgan('dev'));
 }
 
+// Root route
+app.get("/", (req, res) => {
+  res.status(200).json({
+    success: true,
+    message: "RentAll Backend Running"
+  });
+});
+
+// Test route
+app.get("/test", (req, res) => {
+  res.send("Test Route Working");
+});
+
 // Rate Limiting
 app.use('/api', apiRateLimiter);
 
@@ -72,11 +85,6 @@ app.use('/api/v1/reviews', reviewsRouter);
 app.use('/api/v1/search', searchRouter);
 app.use('/api/v1/wishlist', wishlistRouter);
 app.use('/api/v1/notifications', notificationsRouter);
-
-// Root route
-app.get('/', (req, res) => {
-  res.json({ message: 'Welcome to RentAll API v1' });
-});
 
 // Health check endpoint
 app.get('/health', (req, res) => {

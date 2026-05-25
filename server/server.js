@@ -25,7 +25,7 @@ async function startServer() {
   try {
     await connectDB();
 
-    server.listen(PORT, () => {
+    server.listen(PORT, "0.0.0.0", () => {
       console.log(`========================================`);
       console.log(` RentAll Server running in [${NODE_ENV}] mode`);
       console.log(` Listening on port: http://localhost:${PORT}`);
