@@ -18,7 +18,7 @@ const NODE_ENV = process.env.NODE_ENV || 'development';
 const server = http.createServer(app);
 
 // Attach Socket.io
-initSocket(server);
+// initSocket(server);
 
 // Verify Database Connection
 async function startServer() {
