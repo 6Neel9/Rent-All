@@ -2,10 +2,11 @@ const authService = require('./auth.service');
 const { successResponse } = require('../../utils/apiResponse');
 
 const setTokenCookie = (res, token) => {
+  const isProduction = process.env.NODE_ENV === 'production';
   const cookieOptions = {
     httpOnly: true,
-    secure: process.env.NODE_ENV === 'production',
-    sameSite: 'lax',
+    secure: isProduction,
+    sameSite: isProduction ? 'none' : 'lax', // 'none' required for cross-site cookies in production
     maxAge: 7 * 24 * 60 * 60 * 1000 // 7 days
   };
   res.cookie('refreshToken', token, cookieOptions);

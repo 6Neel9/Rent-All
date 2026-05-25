@@ -274,6 +274,42 @@ const uploadListingImages = async (id, hostId, files) => {
   return listing.images;
 };
 
+const addImageUrl = async (id, hostId, imageData) => {
+  const listing = await Listing.findById(id);
+
+  if (!listing) {
+    const error = new Error('Listing not found.');
+    error.statusCode = 404;
+    throw error;
+  }
+
+  if (listing.hostId.toString() !== hostId.toString()) {
+    const error = new Error('Unauthorized listing update.');
+    error.statusCode = 403;
+    throw error;
+  }
+
+  const currentCount = listing.images.length;
+  if (currentCount >= 10) {
+    const error = new Error('Maximum 10 images are allowed per listing.');
+    error.statusCode = 400;
+    throw error;
+  }
+
+  const hasPrimary = listing.images.some(img => img.isPrimary);
+  const newImage = {
+    url: imageData.url,
+    publicId: imageData.publicId,
+    isPrimary: imageData.isPrimary || !hasPrimary,
+    order: currentCount + 1
+  };
+
+  listing.images.push(newImage);
+  await listing.save();
+
+  return listing.images;
+};
+
 const deleteListingImage = async (listingId, imageId, hostId) => {
   const listing = await Listing.findById(listingId);
 
@@ -402,6 +438,7 @@ module.exports = {
   update,
   remove,
   uploadListingImages,
+  addImageUrl,
   deleteListingImage,
   getHostListings,
   blockDates,

@@ -63,7 +63,21 @@ const uploadImages = async (req, res, next) => {
     const { id } = req.params;
     const hostId = req.user.userId;
     const files = req.files || [];
+    const { url, isPrimary } = req.body;
 
+    // Handle URL-based image submission
+    if (url) {
+      const imageData = {
+        url,
+        publicId: `listing_${id}_${Date.now()}`,
+        isPrimary: isPrimary === true || isPrimary === 'true',
+        order: 1
+      };
+      const savedImages = await listingsService.addImageUrl(id, hostId, imageData);
+      return successResponse(res, savedImages, 'Image added successfully.');
+    }
+
+    // Handle file upload
     if (files.length === 0) {
       return res.status(400).json({ success: false, message: 'No images uploaded.' });
     }
