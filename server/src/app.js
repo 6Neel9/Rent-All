@@ -2,6 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const helmet = require('helmet');
 const morgan = require('morgan');
+const mongoose = require('mongoose');
 
 const apiRateLimiter = require('./middleware/rateLimiter');
 const errorHandler = require('./middleware/errorHandler');
@@ -75,6 +76,18 @@ app.use('/api/v1/notifications', notificationsRouter);
 // Root route
 app.get('/', (req, res) => {
   res.json({ message: 'Welcome to RentAll API v1' });
+});
+
+// Health check endpoint
+app.get('/health', (req, res) => {
+  const healthCheck = {
+    status: 'OK',
+    timestamp: new Date().toISOString(),
+    uptime: process.uptime(),
+    environment: process.env.NODE_ENV || 'development',
+    database: mongoose.connection.readyState === 1 ? 'connected' : 'disconnected'
+  };
+  res.status(200).json(healthCheck);
 });
 
 // 404 Not Found Handler
