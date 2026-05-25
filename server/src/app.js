@@ -31,8 +31,22 @@ const corsOptions = {
       'http://localhost:5173',
       'http://localhost:5174',
       'http://localhost:3000',
-      process.env.CORS_ORIGIN
+      'https://rent-all-zlvx.vercel.app/',
+      process.env.CORS_ORIGIN,
+      process.env.CLIENT_URL
     ].filter(Boolean);
+    
+    // In production, allow Railway domains and Vercel deployments
+    if (process.env.NODE_ENV === 'production') {
+      // Allow Railway app domains
+      if (origin && (origin.includes('.railway.app') || origin.includes('.up.railway.app'))) {
+        return callback(null, true);
+      }
+      // Allow Vercel deployments
+      if (origin && origin.includes('.vercel.app')) {
+        return callback(null, true);
+      }
+    }
     
     // Allow requests with no origin (like mobile apps or curl requests)
     if (!origin || allowedOrigins.includes(origin)) {
