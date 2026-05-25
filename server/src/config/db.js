@@ -1,5 +1,11 @@
 const mongoose = require('mongoose');
 
+// Ensure crypto is available for MongoDB
+const crypto = require('crypto');
+if (!global.crypto) {
+  global.crypto = crypto;
+}
+
 const connectDB = async () => {
   try {
     const conn = await mongoose.connect(process.env.DATABASE_URL);

@@ -1,5 +1,11 @@
 require('dotenv').config();
+
+// Ensure crypto is globally available for MongoDB driver
 const crypto = require('crypto');
+if (!global.crypto) {
+  global.crypto = crypto;
+}
+
 const http = require('http');
 const mongoose = require('mongoose');
 const app = require('./src/app');
