@@ -3,7 +3,7 @@ const { z } = require('zod');
 const createListingSchema = z.object({
   title: z.string().min(10, 'Title must be at least 10 characters long'),
   description: z.string().min(50, 'Description must be at least 50 characters long'),
-  categoryId: z.string().uuid('Invalid category ID'),
+  categoryId: z.string().regex(/^[0-9a-fA-F]{24}$/, 'Invalid category ID'),
   pricePerDay: z.number().positive('Price per day must be a positive number'),
   pricePerWeek: z.number().positive('Price per week must be a positive number').optional().nullable(),
   depositAmount: z.number().nonnegative('Deposit amount cannot be negative').default(0),
