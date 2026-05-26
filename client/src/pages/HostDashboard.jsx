@@ -28,7 +28,7 @@ export default function HostDashboard() {
     setLoading(true);
     try {
       // 1. Fetch host listings
-      const listRes = await axiosInstance.get('/listings/host');
+      const listRes = await axiosInstance.get('/listings/host/mine');
       setListings(listRes.data.data);
 
       // 2. Fetch host booking requests

@@ -359,6 +359,11 @@ const getHostListings = async (hostId) => {
 
   return listings.map(l => {
     const lObj = l.toJSON();
+    // Ensure id is set
+    if (!lObj.id && lObj._id) {
+      lObj.id = lObj._id.toString();
+      delete lObj._id;
+    }
     lObj.category = lObj.categoryId;
     delete lObj.categoryId;
     lObj.images = lObj.images ? lObj.images.filter(img => img.isPrimary).slice(0, 1) : [];

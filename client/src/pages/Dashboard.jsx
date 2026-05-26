@@ -39,7 +39,9 @@ export default function Dashboard() {
   const handleCancelBooking = async (bookingId) => {
     if (!window.confirm('Are you sure you want to cancel this booking request?')) return;
     try {
-      await axiosInstance.post(`/bookings/${bookingId}/cancel`);
+      await axiosInstance.put(`/bookings/${bookingId}/cancel`, {
+        cancelReason: 'Cancelled by renter'
+      });
       fetchBookings();
     } catch (err) {
       alert(err.response?.data?.message || 'Failed to cancel booking.');
@@ -61,7 +63,7 @@ export default function Dashboard() {
 
     try {
       await axiosInstance.post('/reviews', {
-        listingId: selectedBooking.listingId,
+        listingId: selectedBooking.listing?.id,
         bookingId: selectedBooking.id,
         rating,
         comment
@@ -185,7 +187,7 @@ export default function Dashboard() {
                 {/* Dashboard Actions */}
                 <div className="flex gap-2">
                   <button
-                    onClick={() => navigate(`/listings/${booking.listingId}`)}
+                    onClick={() => navigate(`/listings/${booking.listing?.id}`)}
                     className="flex-1 rounded-xl border border-slate-200 py-2.5 text-center text-xs font-semibold text-slate-600 hover:bg-slate-50"
                   >
                     View Listing
